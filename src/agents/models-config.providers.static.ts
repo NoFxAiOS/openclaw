@@ -1,5 +1,10 @@
 import type { OpenClawConfig } from "../config/config.js";
 import {
+  CLAW402_ALL_OPENAI_COMPAT_MODELS,
+  CLAW402_ANTHROPIC_MODELS,
+  CLAW402_DEFAULT_BASE_URL,
+} from "./claw402-models.js";
+import {
   KILOCODE_BASE_URL,
   KILOCODE_DEFAULT_CONTEXT_WINDOW,
   KILOCODE_DEFAULT_COST,
@@ -436,5 +441,25 @@ export function buildKilocodeProvider(): ProviderConfig {
       contextWindow: model.contextWindow ?? KILOCODE_DEFAULT_CONTEXT_WINDOW,
       maxTokens: model.maxTokens ?? KILOCODE_DEFAULT_MAX_TOKENS,
     })),
+  };
+}
+
+// ── claw402 x402 micropayment gateway ──
+
+export function buildClaw402Provider(baseUrl?: string): ProviderConfig {
+  const url = baseUrl || CLAW402_DEFAULT_BASE_URL;
+  return {
+    baseUrl: `${url}/api/v1/ai/openai`,
+    api: "openai-completions",
+    models: CLAW402_ALL_OPENAI_COMPAT_MODELS,
+  };
+}
+
+export function buildClaw402AnthropicProvider(baseUrl?: string): ProviderConfig {
+  const url = baseUrl || CLAW402_DEFAULT_BASE_URL;
+  return {
+    baseUrl: `${url}/api/v1/ai/anthropic`,
+    api: "anthropic-messages",
+    models: CLAW402_ANTHROPIC_MODELS,
   };
 }

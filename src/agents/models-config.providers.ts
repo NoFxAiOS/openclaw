@@ -31,6 +31,8 @@ import {
   buildMinimaxProvider,
   buildMoonshotProvider,
   buildNvidiaProvider,
+  buildClaw402AnthropicProvider,
+  buildClaw402Provider,
   buildOpenAICodexProvider,
   buildOpenrouterProvider,
   buildQianfanProvider,
@@ -542,6 +544,20 @@ const PROFILE_IMPLICIT_PROVIDER_LOADERS: ImplicitProviderLoader[] = [
 ];
 
 const PAIRED_IMPLICIT_PROVIDER_LOADERS: ImplicitProviderLoader[] = [
+  async (ctx) => {
+    const claw402Key = ctx.resolveProviderApiKey("claw402").apiKey;
+    if (!claw402Key) {
+      return undefined;
+    }
+    const baseUrl = ctx.env.CLAW402_BASE_URL?.trim() || undefined;
+    return {
+      claw402: { ...buildClaw402Provider(baseUrl), apiKey: claw402Key },
+      "claw402-anthropic": {
+        ...buildClaw402AnthropicProvider(baseUrl),
+        apiKey: claw402Key,
+      },
+    };
+  },
   async (ctx) => {
     const volcengineKey = ctx.resolveProviderApiKey("volcengine").apiKey;
     if (!volcengineKey) {
