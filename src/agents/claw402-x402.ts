@@ -64,8 +64,11 @@ export function installClaw402PaymentFetch(): void {
 
   installed = true;
 
-  // Log wallet info for user
-  console.log(`[claw402] Wallet: ${wallet.address}`);
-  console.log(`[claw402] Gateway: ${claw402BaseUrl}`);
-  console.log(`[claw402] Fund your wallet with USDC on Base to start using AI models`);
+  // Wallet info is shown during onboarding and gateway startup logs.
+  // Only log here if not in a TTY (non-interactive / daemon mode).
+  if (!process.stdout.isTTY) {
+    console.log(`[claw402] Wallet: ${wallet.address}`);
+    console.log(`[claw402] Gateway: ${claw402BaseUrl}`);
+    console.log(`[claw402] Fund your wallet with USDC on Base to start using AI models`);
+  }
 }
