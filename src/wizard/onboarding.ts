@@ -461,12 +461,24 @@ export async function runOnboardingWizard(
         const { writeFileSync, mkdirSync, existsSync } = await import("node:fs");
         const { join } = await import("node:path");
         const { homedir } = await import("node:os");
+        const { privateKeyToAccount } = await import("viem/accounts");
         const walletDir = join(homedir(), ".openclaw", "claw402");
         if (!existsSync(walletDir)) {
           mkdirSync(walletDir, { recursive: true, mode: 0o700 });
         }
-        const key = keyInput.trim().startsWith("0x") ? keyInput.trim() : `0x${keyInput.trim()}`;
-        writeFileSync(join(walletDir, "wallet.key"), key, { mode: 0o600 });
+        const key = (
+          keyInput.trim().startsWith("0x") ? keyInput.trim() : `0x${keyInput.trim()}`
+        ) as `0x${string}`;
+        // Show derived address for user to verify before saving
+        const derivedAccount = privateKeyToAccount(key);
+        const confirmed = await prompter.confirm({
+          message: `Wallet address: ${derivedAccount.address}\nIs this correct?`,
+        });
+        if (confirmed) {
+          writeFileSync(join(walletDir, "wallet.key"), key, { mode: 0o600 });
+        } else {
+          await prompter.note("Wallet import cancelled. A new wallet will be generated.", "Wallet");
+        }
       }
     }
 

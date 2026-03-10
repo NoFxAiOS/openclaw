@@ -56,7 +56,25 @@ export function installClaw402PaymentFetch(): void {
 
     // Only use payFetch for claw402 requests
     if (url.startsWith(claw402BaseUrl)) {
-      return payFetch(input, init);
+      return payFetch(input, init).then((res: Response) => {
+        if (res.status === 402) {
+          throw new Error(
+            `[claw402] Payment required but wallet has insufficient USDC balance.\n` +
+              `Wallet: ${wallet.address}\n` +
+              `Fund your wallet with USDC on Base chain: https://app.uniswap.org\n` +
+              `Or get testnet USDC: https://faucet.circle.com`,
+          );
+        }
+        if (res.status === 403) {
+          throw new Error(
+            `[claw402] Payment failed (403). Your wallet may have insufficient USDC on Base chain.\n` +
+              `Wallet: ${wallet.address}\n` +
+              `Check balance: https://basescan.org/address/${wallet.address}\n` +
+              `Get USDC: https://faucet.circle.com (testnet) or bridge from any chain`,
+          );
+        }
+        return res;
+      });
     }
 
     return originalFetch(input, init);
