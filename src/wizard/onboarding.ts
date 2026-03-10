@@ -422,10 +422,61 @@ export async function runOnboardingWizard(
 
   if (isClaw402) {
     await prompter.note(
-      `Provider: claw402 (x402 USDC payment)\nModel: ${DEFAULT_MODEL}\nNo API key needed — pay per request with USDC on Base chain.`,
+      `Provider: claw402 (x402 USDC payment)\nModel: ${DEFAULT_MODEL}\nPay per request with USDC on Base chain.`,
       "Auto-configured",
     );
-    // Set claw402 as provider with dummy API key marker
+
+    // Wallet setup: import existing or auto-generate
+    const { loadOrCreateWallet, hasWalletConfigured } = await import("../agents/claw402-wallet.js");
+    const hasExisting = hasWalletConfigured();
+
+    const walletChoice = await prompter.select({
+      message: "Base chain wallet (for USDC payments)",
+      options: [
+        ...(hasExisting
+          ? [{ value: "keep", label: "Keep existing wallet", hint: "already configured" }]
+          : []),
+        { value: "import", label: "Import private key", hint: "paste your Base chain wallet key" },
+        { value: "generate", label: "Generate new wallet", hint: "auto-create, fund later" },
+      ],
+    });
+
+    if (walletChoice === "import") {
+      const keyInput = await prompter.text({
+        message: "Paste your Base chain wallet private key (0x...)",
+        placeholder: "0x...",
+        validate: (val: string) => {
+          const trimmed = val.trim();
+          if (!trimmed) {
+            return "Private key is required";
+          }
+          const normalized = trimmed.startsWith("0x") ? trimmed : `0x${trimmed}`;
+          if (!/^0x[0-9a-fA-F]{64}$/.test(normalized)) {
+            return "Invalid private key format (expected 64 hex chars)";
+          }
+          return undefined;
+        },
+      });
+      if (typeof keyInput === "string" && keyInput.trim()) {
+        const { writeFileSync, mkdirSync, existsSync } = await import("node:fs");
+        const { join } = await import("node:path");
+        const { homedir } = await import("node:os");
+        const walletDir = join(homedir(), ".openclaw", "claw402");
+        if (!existsSync(walletDir)) {
+          mkdirSync(walletDir, { recursive: true, mode: 0o700 });
+        }
+        const key = keyInput.trim().startsWith("0x") ? keyInput.trim() : `0x${keyInput.trim()}`;
+        writeFileSync(join(walletDir, "wallet.key"), key, { mode: 0o600 });
+      }
+    }
+
+    const wallet = loadOrCreateWallet();
+    await prompter.note(
+      `Address: ${wallet.address}\nKey file: ~/.openclaw/claw402/wallet.key\n\nFund this address with USDC on Base chain to start using AI.`,
+      "💰 Wallet",
+    );
+
+    // Set claw402 as provider
     nextConfig = {
       ...nextConfig,
       agents: {
