@@ -17,7 +17,7 @@ export const CLAW402_DEFAULT_BASE_URL = "https://claw402.ai";
 
 export const CLAW402_ANTHROPIC_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/claude-opus-4.6",
+    id: "claude-opus-4.6",
     name: "Claude Opus 4.6 (claw402)",
     api: "anthropic-messages",
     reasoning: true,
@@ -33,7 +33,7 @@ export const CLAW402_ANTHROPIC_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_OPENAI_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/gpt-5.4",
+    id: "gpt-5.4",
     name: "GPT-5.4 (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -43,7 +43,7 @@ export const CLAW402_OPENAI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 32768,
   },
   {
-    id: "claw402/gpt-5.4-pro",
+    id: "gpt-5.4-pro",
     name: "GPT-5.4 Pro (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -53,7 +53,7 @@ export const CLAW402_OPENAI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 32768,
   },
   {
-    id: "claw402/gpt-5.3",
+    id: "gpt-5.3",
     name: "GPT-5.3 (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -63,7 +63,7 @@ export const CLAW402_OPENAI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 16384,
   },
   {
-    id: "claw402/gpt-5-mini",
+    id: "gpt-5-mini",
     name: "GPT-5 Mini (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -79,7 +79,7 @@ export const CLAW402_OPENAI_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_DEEPSEEK_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/deepseek-chat",
+    id: "deepseek-chat",
     name: "DeepSeek Chat V3 (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -89,7 +89,7 @@ export const CLAW402_DEEPSEEK_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/deepseek-reasoner",
+    id: "deepseek-reasoner",
     name: "DeepSeek Reasoner (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -105,7 +105,7 @@ export const CLAW402_DEEPSEEK_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/qwen3-max",
+    id: "qwen3-max",
     name: "Qwen3 Max (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -115,7 +115,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/qwen-plus",
+    id: "qwen-plus",
     name: "Qwen Plus (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -125,7 +125,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/qwen-turbo",
+    id: "qwen-turbo",
     name: "Qwen Turbo (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -135,7 +135,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/qwen-flash",
+    id: "qwen-flash",
     name: "Qwen Flash (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -145,7 +145,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/qwen-coder",
+    id: "qwen-coder",
     name: "Qwen3 Coder Plus (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -155,7 +155,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 8192,
   },
   {
-    id: "claw402/qwen-vl",
+    id: "qwen-vl",
     name: "Qwen VL Plus (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -171,7 +171,7 @@ export const CLAW402_QWEN_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/gemini-3.1-pro",
+    id: "gemini-3.1-pro",
     name: "Gemini 3.1 Pro (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -181,7 +181,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 65536,
   },
   {
-    id: "claw402/gemini-3-flash",
+    id: "gemini-3-flash",
     name: "Gemini 3 Flash (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -191,7 +191,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 65536,
   },
   {
-    id: "claw402/gemini-3.1-flash-lite",
+    id: "gemini-3.1-flash-lite",
     name: "Gemini 3.1 Flash Lite (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -201,7 +201,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 65536,
   },
   {
-    id: "claw402/gemini-2.5-pro",
+    id: "gemini-2.5-pro",
     name: "Gemini 2.5 Pro (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -211,7 +211,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 65536,
   },
   {
-    id: "claw402/gemini-2.5-flash",
+    id: "gemini-2.5-flash",
     name: "Gemini 2.5 Flash (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -221,7 +221,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 65536,
   },
   {
-    id: "claw402/gemini-2.5-flash-lite",
+    id: "gemini-2.5-flash-lite",
     name: "Gemini 2.5 Flash Lite (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -237,7 +237,7 @@ export const CLAW402_GEMINI_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_GROK_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/grok-4.1",
+    id: "grok-4.1",
     name: "Grok 4.1 (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -247,7 +247,7 @@ export const CLAW402_GROK_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 16384,
   },
   {
-    id: "claw402/grok-4.1-fast",
+    id: "grok-4.1-fast",
     name: "Grok 4.1 Fast (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -257,7 +257,7 @@ export const CLAW402_GROK_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 16384,
   },
   {
-    id: "claw402/grok-4",
+    id: "grok-4",
     name: "Grok 4 (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -267,7 +267,7 @@ export const CLAW402_GROK_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 16384,
   },
   {
-    id: "claw402/grok-3-mini",
+    id: "grok-3-mini",
     name: "Grok 3 Mini (claw402)",
     api: "openai-completions",
     reasoning: false,
@@ -283,7 +283,7 @@ export const CLAW402_GROK_MODELS: ModelDefinitionConfig[] = [
 
 export const CLAW402_KIMI_MODELS: ModelDefinitionConfig[] = [
   {
-    id: "claw402/kimi-k2.5",
+    id: "kimi-k2.5",
     name: "Kimi K2.5 (claw402)",
     api: "openai-completions",
     reasoning: true,
@@ -293,7 +293,7 @@ export const CLAW402_KIMI_MODELS: ModelDefinitionConfig[] = [
     maxTokens: 16384,
   },
   {
-    id: "claw402/kimi-k2",
+    id: "kimi-k2",
     name: "Kimi K2 (claw402)",
     api: "openai-completions",
     reasoning: false,
