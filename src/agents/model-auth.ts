@@ -243,6 +243,12 @@ export async function resolveApiKeyForProvider(params: {
     return syntheticLocalAuth;
   }
 
+  // claw402: x402 payment, no real API key needed
+  const normalizedForClaw402 = normalizeProviderId(provider);
+  if (normalizedForClaw402 === "claw402" || normalizedForClaw402 === "claw402-anthropic") {
+    return { apiKey: "x402-payment", source: "claw402-builtin", mode: "api-key" };
+  }
+
   const normalized = normalizeProviderId(provider);
   if (authOverride === undefined && normalized === "amazon-bedrock") {
     return resolveAwsSdkAuthInfo();
