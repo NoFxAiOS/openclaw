@@ -544,20 +544,7 @@ const PROFILE_IMPLICIT_PROVIDER_LOADERS: ImplicitProviderLoader[] = [
 ];
 
 const PAIRED_IMPLICIT_PROVIDER_LOADERS: ImplicitProviderLoader[] = [
-  async (ctx) => {
-    const claw402Key = ctx.resolveProviderApiKey("claw402").apiKey;
-    if (!claw402Key) {
-      return undefined;
-    }
-    const baseUrl = ctx.env.CLAW402_BASE_URL?.trim() || undefined;
-    return {
-      claw402: { ...buildClaw402Provider(baseUrl), apiKey: claw402Key },
-      "claw402-anthropic": {
-        ...buildClaw402AnthropicProvider(baseUrl),
-        apiKey: claw402Key,
-      },
-    };
-  },
+  // claw402 moved to always-register block in resolveImplicitProviders
   async (ctx) => {
     const volcengineKey = ctx.resolveProviderApiKey("volcengine").apiKey;
     if (!volcengineKey) {
@@ -714,6 +701,21 @@ export async function resolveImplicitProviders(
   for (const loader of PAIRED_IMPLICIT_PROVIDER_LOADERS) {
     mergeImplicitProviderSet(providers, await loader(context));
   }
+  // claw402: always register (x402 payment, no API key required)
+  // Install the x402 payment interceptor so 402 responses are auto-handled
+  if (!providers["claw402"]) {
+    const { installClaw402PaymentFetch } = await import("./claw402-x402.js");
+    installClaw402PaymentFetch();
+
+    const claw402Key = context.resolveProviderApiKey("claw402").apiKey || "x402-payment";
+    const baseUrl = env.CLAW402_BASE_URL?.trim() || undefined;
+    providers["claw402"] = { ...buildClaw402Provider(baseUrl), apiKey: claw402Key };
+    providers["claw402-anthropic"] = {
+      ...buildClaw402AnthropicProvider(baseUrl),
+      apiKey: claw402Key,
+    };
+  }
+
   mergeImplicitProviderSet(providers, await resolveCloudflareAiGatewayImplicitProvider(context));
   mergeImplicitProviderSet(providers, await resolveOllamaImplicitProvider(context));
   mergeImplicitProviderSet(providers, await resolveVllmImplicitProvider(context));
