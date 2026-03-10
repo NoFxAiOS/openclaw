@@ -534,7 +534,7 @@ export async function runOnboardingWizard(
     skipBootstrap: Boolean(nextConfig.agents?.defaults?.skipBootstrap),
   });
 
-  if (opts.skipSearch) {
+  if (isClaw402 || opts.skipSearch) {
     await prompter.note("Skipping search setup.", "Search");
   } else {
     const { setupSearch } = await import("../commands/onboard-search.js");
