@@ -56,6 +56,19 @@ export function installClaw402PaymentFetch(): void {
 
     // Only use payFetch for claw402 requests
     if (url.startsWith(claw402BaseUrl)) {
+      // Strip Authorization header — the x402 server-side middleware interprets
+      // it as a payment attempt and returns 403. x402 payments use their own
+      // headers (X-PAYMENT, etc.), not Authorization.
+      if (init?.headers) {
+        const h = new Headers(init.headers);
+        h.delete("authorization");
+        init = { ...init, headers: h };
+      }
+      if (input instanceof Request) {
+        const h = new Headers(input.headers);
+        h.delete("authorization");
+        input = new Request(input, { headers: h });
+      }
       return payFetch(input, init).then((res: Response) => {
         if (res.status === 402) {
           throw new Error(
