@@ -56,17 +56,30 @@ export function installClaw402PaymentFetch(): void {
 
     // Only use payFetch for claw402 requests
     if (url.startsWith(claw402BaseUrl)) {
-      // Strip Authorization header — the x402 server-side middleware interprets
-      // it as a payment attempt and returns 403. x402 payments use their own
-      // headers (X-PAYMENT, etc.), not Authorization.
+      // Strip headers that interfere with claw402 gateway:
+      // - Authorization: x402 uses PAYMENT-SIGNATURE header, not Authorization
+      // - user-agent containing "OpenAI": Cloudflare WAF blocks bot-like UAs
+      // - x-stainless-*: OpenAI SDK telemetry headers (unnecessary noise)
+      const sanitizeHeaders = (h: Headers) => {
+        h.delete("authorization");
+        for (const key of h.keys()) {
+          if (key.startsWith("x-stainless")) {
+            h.delete(key);
+          }
+        }
+        const ua = h.get("user-agent");
+        if (ua && /openai/i.test(ua)) {
+          h.set("user-agent", "claw402-client/1.0");
+        }
+      };
       if (init?.headers) {
         const h = new Headers(init.headers);
-        h.delete("authorization");
+        sanitizeHeaders(h);
         init = { ...init, headers: h };
       }
       if (input instanceof Request) {
         const h = new Headers(input.headers);
-        h.delete("authorization");
+        sanitizeHeaders(h);
         input = new Request(input, { headers: h });
       }
       return payFetch(input, init).then((res: Response) => {
