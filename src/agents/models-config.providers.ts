@@ -573,6 +573,7 @@ const PAIRED_IMPLICIT_PROVIDER_LOADERS: ImplicitProviderLoader[] = [
   },
 ];
 
+// eslint-disable-next-line no-unused-vars
 async function resolveCloudflareAiGatewayImplicitProvider(
   ctx: ImplicitProviderContext,
 ): Promise<Record<string, ProviderConfig> | undefined> {
@@ -643,6 +644,7 @@ async function resolveOllamaImplicitProvider(
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 async function resolveVllmImplicitProvider(
   ctx: ImplicitProviderContext,
 ): Promise<Record<string, ProviderConfig> | undefined> {
@@ -716,38 +718,19 @@ export async function resolveImplicitProviders(
     };
   }
 
-  mergeImplicitProviderSet(providers, await resolveCloudflareAiGatewayImplicitProvider(context));
-  mergeImplicitProviderSet(providers, await resolveOllamaImplicitProvider(context));
-  mergeImplicitProviderSet(providers, await resolveVllmImplicitProvider(context));
-
-  if (!providers["github-copilot"]) {
-    const implicitCopilot = await resolveImplicitCopilotProvider({
-      agentDir: params.agentDir,
-      env,
-    });
-    if (implicitCopilot) {
-      providers["github-copilot"] = implicitCopilot;
+  // claw402-only mode: remove all non-claw402 providers so /model only shows
+  // claw402 models. Users don't need direct provider keys — everything goes
+  // through claw402 gateway with x402 payment.
+  for (const key of Object.keys(providers)) {
+    if (!key.startsWith("claw402")) {
+      delete providers[key];
     }
   }
 
-  const implicitBedrock = await resolveImplicitBedrockProvider({
-    agentDir: params.agentDir,
-    config: params.config,
-    env,
-  });
-  if (implicitBedrock) {
-    const existing = providers["amazon-bedrock"];
-    providers["amazon-bedrock"] = existing
-      ? {
-          ...implicitBedrock,
-          ...existing,
-          models:
-            Array.isArray(existing.models) && existing.models.length > 0
-              ? existing.models
-              : implicitBedrock.models,
-        }
-      : implicitBedrock;
-  }
+  // Still allow local Ollama if available (free, no payment needed)
+  mergeImplicitProviderSet(providers, await resolveOllamaImplicitProvider(context));
+
+  // claw402-only: skip copilot, bedrock, and other provider registrations
 
   return providers;
 }
