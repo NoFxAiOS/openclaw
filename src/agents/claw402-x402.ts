@@ -50,7 +50,7 @@ export function installClaw402PaymentFetch(): void {
   const originalFetch = globalThis.fetch;
   const payFetch = wrapFetchWithPayment(originalFetch, client);
 
-  globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+  const claw402Fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
     const url =
       typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
 
@@ -79,6 +79,14 @@ export function installClaw402PaymentFetch(): void {
 
     return originalFetch(input, init);
   }) as typeof fetch;
+
+  // Patch globalThis.fetch for code that uses the global directly
+  globalThis.fetch = claw402Fetch;
+
+  // Also store on a well-known global so bundled code (e.g. OpenAI SDK in ESM)
+  // can explicitly pick it up — bare `fetch` in Node ESM may not reflect
+  // globalThis.fetch reassignment.
+  (globalThis as Record<string, unknown>).__claw402Fetch = claw402Fetch;
 
   installed = true;
 

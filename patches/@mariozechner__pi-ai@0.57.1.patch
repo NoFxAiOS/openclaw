@@ -1,0 +1,12 @@
+diff --git a/dist/providers/openai-completions.js b/dist/providers/openai-completions.js
+index c37f67f164c8880474cfd2c221d130594c273d08..dea2cd2f656bba83498ebde66d311532f5f14102 100644
+--- a/dist/providers/openai-completions.js
++++ b/dist/providers/openai-completions.js
+@@ -290,6 +290,7 @@ function createClient(model, context, apiKey, optionsHeaders) {
+         baseURL: model.baseUrl,
+         dangerouslyAllowBrowser: true,
+         defaultHeaders: headers,
++        ...(globalThis.__claw402Fetch ? { fetch: globalThis.__claw402Fetch } : {}),
+     });
+ }
+ function buildParams(model, context, options) {
