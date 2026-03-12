@@ -1,4 +1,5 @@
 import os from "node:os";
+import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveGatewayPort } from "../config/paths.js";
 import type { OpenClawConfig } from "../config/types.js";
 import {
@@ -59,7 +60,7 @@ type ResolveUrlResult = {
 type ResolveAuthResult = {
   token?: string;
   password?: string;
-  label?: "token" | "password";
+  label?: "token" | "password" | "none";
   error?: string;
 };
 
@@ -201,6 +202,10 @@ function resolveAuth(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): ResolveAuthRe
   if (password) {
     return { password, label: "password" };
   }
+  // claw402 mode: auth not required (x402 handles payment)
+  if (DEFAULT_PROVIDER === "claw402") {
+    return { label: "none" };
+  }
   return { error: "Gateway auth is not configured (no token or password)." };
 }
 
@@ -214,6 +219,10 @@ async function resolveGatewayTokenSecretRef(
   }
   const mode = cfg.gateway?.auth?.mode;
   if (mode === "password" || mode === "none" || mode === "trusted-proxy") {
+    return cfg;
+  }
+  // claw402 mode: skip secret ref resolution when no auth configured
+  if (!mode && DEFAULT_PROVIDER === "claw402") {
     return cfg;
   }
   if (mode !== "token") {

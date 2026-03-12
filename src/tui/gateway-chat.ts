@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { loadConfig } from "../config/config.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 import { assertExplicitGatewayAuthModeWhenBothConfigured } from "../gateway/auth-mode-policy.js";
@@ -270,7 +271,16 @@ export async function resolveGatewayConnection(
 ): Promise<ResolvedGatewayConnection> {
   const config = loadConfig();
   const env = process.env;
-  const gatewayAuthMode = config.gateway?.auth?.mode;
+  // claw402 mode: default to auth "none" when no auth is configured (x402 handles payment)
+  const gatewayAuthMode =
+    config.gateway?.auth?.mode ??
+    (DEFAULT_PROVIDER === "claw402" &&
+    !config.gateway?.auth?.token &&
+    !config.gateway?.auth?.password &&
+    !env.OPENCLAW_GATEWAY_TOKEN &&
+    !env.OPENCLAW_GATEWAY_PASSWORD
+      ? "none"
+      : undefined);
   const isRemoteMode = config.gateway?.mode === "remote";
   const remote = config.gateway?.remote;
   const envToken = trimToUndefined(env.OPENCLAW_GATEWAY_TOKEN);
