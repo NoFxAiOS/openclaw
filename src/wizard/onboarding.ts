@@ -496,6 +496,11 @@ export async function runOnboardingWizard(
     qrcode.generate(wallet.address, { small: true });
     console.log("");
 
+    await prompter.confirm({
+      message: "You can fund your wallet now or later. Ready to continue?",
+      initialValue: true,
+    });
+
     // Set claw402 as provider
     nextConfig = {
       ...nextConfig,
