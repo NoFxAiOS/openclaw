@@ -1,3 +1,4 @@
+import qrcode from "qrcode-terminal";
 import { formatCliCommand } from "../cli/command-format.js";
 import type {
   GatewayAuthChoice,
@@ -487,6 +488,13 @@ export async function runOnboardingWizard(
       `Address: ${wallet.address}\nKey file: ~/.openclaw/claw402/wallet.key\n\nFund this address with USDC on Base chain to start using AI.`,
       "💰 Wallet",
     );
+
+    // Show QR code for easy USDC deposit
+    console.log("");
+    console.log("  Scan to send USDC (Base chain) to this wallet:");
+    console.log("");
+    qrcode.generate(wallet.address, { small: true });
+    console.log("");
 
     // Set claw402 as provider
     nextConfig = {
