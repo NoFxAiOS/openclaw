@@ -26,6 +26,16 @@ export const CLAW402_ANTHROPIC_MODELS: ModelDefinitionConfig[] = [
     contextWindow: 200000,
     maxTokens: 32768,
   },
+  {
+    id: "claude-sonnet-4.6",
+    name: "Claude Sonnet 4.6 (claw402)",
+    api: "anthropic-messages",
+    reasoning: true,
+    input: ["text", "image"],
+    cost: { input: 3.0, output: 15.0, cacheRead: 0.3, cacheWrite: 3.0 },
+    contextWindow: 200000,
+    maxTokens: 16384,
+  },
 ];
 
 // ── OpenAI ──

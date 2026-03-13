@@ -489,11 +489,12 @@ export async function runOnboardingWizard(
       "💰 Wallet",
     );
 
-    // Show QR code for easy USDC deposit
+    // Show QR code for easy USDC deposit (EIP-681 format for auto chain/token selection)
+    const { buildUsdcPaymentUri } = await import("../agents/claw402-constants.js");
     console.log("");
-    console.log("  Scan to send USDC (Base chain) to this wallet:");
+    console.log("  Scan with MetaMask / Coinbase Wallet to send USDC on Base:");
     console.log("");
-    qrcode.generate(wallet.address, { small: true });
+    qrcode.generate(buildUsdcPaymentUri(wallet.address), { small: true });
     console.log("");
 
     await prompter.confirm({

@@ -10,3 +10,14 @@ index c37f67f164c8880474cfd2c221d130594c273d08..dea2cd2f656bba83498ebde66d311532
      });
  }
  function buildParams(model, context, options) {
+diff --git a/dist/providers/anthropic.js b/dist/providers/anthropic.js
+--- a/dist/providers/anthropic.js
++++ b/dist/providers/anthropic.js
+@@ -445,6 +445,7 @@ function createClient(model, apiKey, interleavedThinking, optionsHeaders, dynami
+         apiKey,
+         baseURL: model.baseUrl,
+         dangerouslyAllowBrowser: true,
++        ...(globalThis.__claw402Fetch ? { fetch: globalThis.__claw402Fetch } : {}),
+         defaultHeaders: mergeHeaders({
+             accept: "application/json",
+             "anthropic-dangerous-direct-browser-access": "true",

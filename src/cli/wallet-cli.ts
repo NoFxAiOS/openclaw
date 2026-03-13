@@ -13,18 +13,10 @@ import { join } from "node:path";
 import type { Command } from "commander";
 import qrcode from "qrcode-terminal";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { buildUsdcPaymentUri } from "../agents/claw402-constants.js";
 
 const WALLET_DIR = join(homedir(), ".openclaw", "claw402");
 const WALLET_KEY_FILE = join(WALLET_DIR, "wallet.key");
-
-// USDC on Base (EIP-681 payment link)
-const USDC_BASE_CONTRACT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-const BASE_CHAIN_ID = 8453;
-
-/** Build an EIP-681 payment URI so wallets auto-fill chain + token + recipient */
-function buildPaymentUri(address: string): string {
-  return `ethereum:${USDC_BASE_CONTRACT}@${BASE_CHAIN_ID}/transfer?address=${address}`;
-}
 
 function ensureWalletDir(): void {
   if (!existsSync(WALLET_DIR)) {
@@ -50,7 +42,7 @@ function showWallet(): void {
   console.log("");
   console.log("  Scan with MetaMask / Coinbase Wallet to send USDC on Base:");
   console.log("");
-  qrcode.generate(buildPaymentUri(account.address), { small: true });
+  qrcode.generate(buildUsdcPaymentUri(account.address), { small: true });
   console.log("");
 }
 
@@ -83,7 +75,7 @@ export function registerWalletCli(program: Command): void {
       console.log(`  ✅ Wallet imported: ${account.address}`);
       console.log(`  📁 Key file: ${WALLET_KEY_FILE}`);
       console.log("");
-      qrcode.generate(buildPaymentUri(account.address), { small: true });
+      qrcode.generate(buildUsdcPaymentUri(account.address), { small: true });
       console.log("");
     });
 
@@ -108,7 +100,7 @@ export function registerWalletCli(program: Command): void {
       console.log("");
       console.log("  Scan with MetaMask / Coinbase Wallet to send USDC on Base:");
       console.log("");
-      qrcode.generate(buildPaymentUri(account.address), { small: true });
+      qrcode.generate(buildUsdcPaymentUri(account.address), { small: true });
       console.log("");
     });
 }

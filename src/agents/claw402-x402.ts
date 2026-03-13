@@ -87,8 +87,9 @@ export function installClaw402PaymentFetch(): void {
           throw new Error(
             `[claw402] Payment required but wallet has insufficient USDC balance.\n` +
               `Wallet: ${wallet.address}\n` +
-              `Fund your wallet with USDC on Base chain: https://app.uniswap.org\n` +
-              `Or get testnet USDC: https://faucet.circle.com`,
+              `Check balance: https://basescan.org/address/${wallet.address}\n` +
+              `Fund your wallet with USDC on Base chain.\n` +
+              `Run 'openclaw wallet' to see your address and QR code.`,
           );
         }
         if (res.status === 403) {
@@ -96,7 +97,7 @@ export function installClaw402PaymentFetch(): void {
             `[claw402] Payment failed (403). Your wallet may have insufficient USDC on Base chain.\n` +
               `Wallet: ${wallet.address}\n` +
               `Check balance: https://basescan.org/address/${wallet.address}\n` +
-              `Get USDC: https://faucet.circle.com (testnet) or bridge from any chain`,
+              `Run 'openclaw wallet' to see your address and QR code.`,
           );
         }
         return res;
