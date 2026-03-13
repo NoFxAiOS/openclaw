@@ -1,64 +1,64 @@
 # 🦞 OpenClaw402 — Pay-per-use AI Assistant with USDC
 
-> **OpenClaw402** 是 [OpenClaw](https://github.com/openclaw/openclaw) 的定制版，集成了 [claw402](https://claw402.ai) x402 微支付网关。无需 API Key，用 Base 链 USDC 即用即付。
+> **OpenClaw402** is a customized version of [OpenClaw](https://github.com/openclaw/openclaw), integrated with the [claw402](https://claw402.ai) x402 micropayment gateway. No API keys needed — pay as you go with USDC on Base.
 
-## ✨ 特性
+## ✨ Features
 
-- **零配置 AI** — 不需要 OpenAI/Anthropic/Google 等 API Key
-- **USDC 即用即付** — Base 链 USDC 微支付，按 token 计费，用多少付多少
-- **非托管钱包** — 私钥只存在你本地 (`~/.openclaw/claw402/wallet.key`)，从不上传
-- **22+ 模型** — 通过 claw402 网关访问 OpenAI、Anthropic、DeepSeek、Qwen、Gemini、Grok、Kimi 等
-- **全渠道** — WhatsApp、Telegram、Discord、Slack、Signal、iMessage、微信（WeChat）等 20+ 平台
-- **语音交互** — macOS/iOS/Android 语音输入输出
-- **Canvas** — 实时可控的画布渲染
-- **完整 OpenClaw 功能** — 所有原版功能都保留
+- **Zero-config AI** — No OpenAI/Anthropic/Google API keys required
+- **USDC Pay-per-use** — Base chain USDC micropayments, billed per token, pay only for what you use
+- **Non-custodial Wallet** — Private key stored locally only (`~/.openclaw/claw402/wallet.key`), never uploaded
+- **22+ Models** — Access OpenAI, Anthropic, DeepSeek, Qwen, Gemini, Grok, Kimi and more via the claw402 gateway
+- **Omnichannel** — WhatsApp, Telegram, Discord, Slack, Signal, iMessage, WeChat and 20+ platforms
+- **Voice** — macOS/iOS/Android voice input & output
+- **Canvas** — Real-time controllable canvas rendering
+- **Full OpenClaw Features** — All upstream capabilities preserved
 
-## 🚀 一键安装
+## 🚀 Quick Install
 
 ```bash
 curl -fsSL https://claw402.ai/install.sh | bash
 ```
 
-安装脚本会自动：
+The install script will automatically:
 
-1. 安装 Node.js（如果没有）
-2. 下载 OpenClaw402 源码
-3. 构建项目
-4. 进入引导向导（生成钱包 + 配置频道）
+1. Install Node.js (if not present)
+2. Download the OpenClaw402 source
+3. Build the project
+4. Launch the setup wizard (generate wallet + configure channels)
 
-安装完成后：
-
-```bash
-source ~/.bashrc   # 或 source ~/.zshrc
-openclaw           # 启动
-```
-
-## 💰 钱包管理
-
-安装时自动生成 Base 链钱包，显示 QR 码方便充值。
+After installation:
 
 ```bash
-openclaw wallet            # 查看钱包地址 + QR 码
-openclaw wallet generate   # 生成新钱包（自动备份旧钱包）
-openclaw wallet import <key>  # 导入已有私钥
+source ~/.bashrc   # or source ~/.zshrc
+openclaw           # start
 ```
 
-**充值方式：** 使用任意支持 Base 链的钱包（Coinbase Wallet、MetaMask、OKX 等）向你的地址转入 USDC。
+## 💰 Wallet Management
 
-## 🔧 工作原理
+A Base chain wallet is generated automatically during setup, with a QR code for easy funding.
+
+```bash
+openclaw wallet            # View wallet address + QR code
+openclaw wallet generate   # Generate new wallet (auto-backs up old wallet)
+openclaw wallet import <key>  # Import existing private key
+```
+
+**Funding:** Use any Base-compatible wallet (Coinbase Wallet, MetaMask, OKX, etc.) to send USDC to your address.
+
+## 🔧 How It Works
 
 ```
-用户请求 → OpenClaw402 → fetch(claw402.ai) → 402 Payment Required
-         → 自动签名 USDC 支付 → claw402 收款转发给 AI 供应商 → 返回结果
+User request → OpenClaw402 → fetch(claw402.ai) → 402 Payment Required
+             → Auto-sign USDC payment → claw402 forwards to AI provider → Response
 ```
 
-基于 [x402 协议](https://www.x402.org/)，每次 API 调用自动完成链上 USDC 支付，无需手动操作。
+Built on the [x402 protocol](https://www.x402.org/). Each API call automatically completes an on-chain USDC payment — no manual steps required.
 
-## 📦 可用模型
+## 📦 Available Models
 
-通过 claw402 网关访问以下模型（持续更新）：
+Models accessible via the claw402 gateway (continuously updated):
 
-| Provider  | 模型                                          |
+| Provider  | Models                                        |
 | --------- | --------------------------------------------- |
 | OpenAI    | GPT-5.4, GPT-5.4 Pro, GPT-5 Mini, o3, o4-mini |
 | Anthropic | Claude Opus 4.6, Claude Sonnet 4.6            |
@@ -68,47 +68,47 @@ openclaw wallet import <key>  # 导入已有私钥
 | xAI       | Grok 3                                        |
 | Moonshot  | Kimi K2                                       |
 
-查看实时模型列表和定价：[claw402.ai](https://claw402.ai)
+See live model list and pricing: [claw402.ai](https://claw402.ai)
 
-## 🔄 更新
+## 🔄 Update
 
 ```bash
 curl -fsSL https://claw402.ai/install.sh | bash
 ```
 
-重新运行安装脚本即可更新到最新版本。已有配置和钱包不会被覆盖。
+Re-run the install script to update. Existing config and wallet are preserved.
 
-## ⚙️ 环境变量
+## ⚙️ Environment Variables
 
-| 变量                 | 说明                           |
-| -------------------- | ------------------------------ |
-| `CLAW402_WALLET_KEY` | 直接指定钱包私钥（优先级最高） |
+| Variable             | Description                                            |
+| -------------------- | ------------------------------------------------------ |
+| `CLAW402_WALLET_KEY` | Specify wallet private key directly (highest priority) |
 
-## 📁 文件位置
+## 📁 File Locations
 
-| 路径                             | 说明             |
-| -------------------------------- | ---------------- |
-| `~/openclaw402/`                 | 源码 + 构建产物  |
-| `~/.openclaw/`                   | 配置 + workspace |
-| `~/.openclaw/claw402/wallet.key` | 钱包私钥 ⚠️      |
-| `~/.local/bin/openclaw`          | 启动脚本         |
+| Path                             | Description           |
+| -------------------------------- | --------------------- |
+| `~/openclaw402/`                 | Source + build output |
+| `~/.openclaw/`                   | Config + workspace    |
+| `~/.openclaw/claw402/wallet.key` | Wallet private key ⚠️ |
+| `~/.local/bin/openclaw`          | Launch script         |
 
-## 🗑️ 卸载
+## 🗑️ Uninstall
 
 ```bash
 rm -rf ~/openclaw402 ~/.local/bin/openclaw
-# 如需完全清除（包括配置和钱包）：
+# To fully remove (including config and wallet):
 # rm -rf ~/.openclaw
-# ⚠️ 请先备份 ~/.openclaw/claw402/wallet.key（如果钱包里有余额）
+# ⚠️ Back up ~/.openclaw/claw402/wallet.key first if your wallet has a balance
 ```
 
-## 🔗 相关链接
+## 🔗 Links
 
-- **claw402 网关**: [claw402.ai](https://claw402.ai)
-- **OpenClaw 原版**: [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw)
-- **OpenClaw 文档**: [docs.openclaw.ai](https://docs.openclaw.ai)
-- **x402 协议**: [x402.org](https://www.x402.org/)
+- **claw402 Gateway**: [claw402.ai](https://claw402.ai)
+- **OpenClaw Upstream**: [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw)
+- **OpenClaw Docs**: [docs.openclaw.ai](https://docs.openclaw.ai)
+- **x402 Protocol**: [x402.org](https://www.x402.org/)
 
 ## 📄 License
 
-MIT — 基于 [OpenClaw](https://github.com/openclaw/openclaw) 定制。
+MIT — Based on [OpenClaw](https://github.com/openclaw/openclaw).
