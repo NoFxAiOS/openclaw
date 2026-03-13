@@ -17,6 +17,15 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 const WALLET_DIR = join(homedir(), ".openclaw", "claw402");
 const WALLET_KEY_FILE = join(WALLET_DIR, "wallet.key");
 
+// USDC on Base (EIP-681 payment link)
+const USDC_BASE_CONTRACT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+const BASE_CHAIN_ID = 8453;
+
+/** Build an EIP-681 payment URI so wallets auto-fill chain + token + recipient */
+function buildPaymentUri(address: string): string {
+  return `ethereum:${USDC_BASE_CONTRACT}@${BASE_CHAIN_ID}/transfer?address=${address}`;
+}
+
 function ensureWalletDir(): void {
   if (!existsSync(WALLET_DIR)) {
     mkdirSync(WALLET_DIR, { recursive: true, mode: 0o700 });
@@ -39,9 +48,9 @@ function showWallet(): void {
   console.log(`  💰 Wallet Address: ${account.address}`);
   console.log(`  📁 Key file: ${WALLET_KEY_FILE}`);
   console.log("");
-  console.log("  Scan to send USDC (Base chain):");
+  console.log("  Scan with MetaMask / Coinbase Wallet to send USDC on Base:");
   console.log("");
-  qrcode.generate(account.address, { small: true });
+  qrcode.generate(buildPaymentUri(account.address), { small: true });
   console.log("");
 }
 
@@ -74,7 +83,7 @@ export function registerWalletCli(program: Command): void {
       console.log(`  ✅ Wallet imported: ${account.address}`);
       console.log(`  📁 Key file: ${WALLET_KEY_FILE}`);
       console.log("");
-      qrcode.generate(account.address, { small: true });
+      qrcode.generate(buildPaymentUri(account.address), { small: true });
       console.log("");
     });
 
@@ -97,9 +106,9 @@ export function registerWalletCli(program: Command): void {
       console.log(`  ✅ New wallet generated: ${account.address}`);
       console.log(`  📁 Key file: ${WALLET_KEY_FILE}`);
       console.log("");
-      console.log("  Scan to send USDC (Base chain):");
+      console.log("  Scan with MetaMask / Coinbase Wallet to send USDC on Base:");
       console.log("");
-      qrcode.generate(account.address, { small: true });
+      qrcode.generate(buildPaymentUri(account.address), { small: true });
       console.log("");
     });
 }
