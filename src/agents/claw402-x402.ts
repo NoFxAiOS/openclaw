@@ -75,11 +75,13 @@ export function installClaw402PaymentFetch(): void {
       if (init?.headers) {
         const h = new Headers(init.headers);
         sanitizeHeaders(h);
+        h.set("X-Client-ID", "openclaw402");
         init = { ...init, headers: h };
       }
       if (input instanceof Request) {
         const h = new Headers(input.headers);
         sanitizeHeaders(h);
+        h.set("X-Client-ID", "openclaw402");
         input = new Request(input, { headers: h });
       }
       return payFetch(input, init).then((res: Response) => {
